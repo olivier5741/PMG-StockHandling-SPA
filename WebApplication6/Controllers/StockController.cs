@@ -11,9 +11,24 @@ namespace WebApplication6.Controllers
     {
         List<StockProduct> products = new List<StockProduct>(){
             new StockProduct(){
-                Id = "StockProduct/1",
-                Product = new Product(){Name = "Oranges"},
-                AvailableQuantity = new ProductQuantity(){Amount=10, Unit=ProductQuantityUnit.SingleUnit}
+                Id = "1",
+                Product = new Product(){Name = "Orange"},
+                AvailableBaseQuantity = new ProductQuantity(){
+                    Amount=10, 
+                    Unit=ProductQuantityUnit.SingleUnit
+                }
+            },
+            new StockProduct(){
+                Id = "2",
+                Product = new Product(){Name = "Citron"},
+                AvailableQuantity = new ProductQuantity(){
+                    Amount=4, 
+                    Unit=ProductQuantityUnit.Box
+                },
+                AvailableBaseQuantity = new ProductQuantity(){
+                    Amount=40,
+                    Unit=ProductQuantityUnit.SingleUnit
+                }
             }
         };
 
@@ -24,9 +39,9 @@ namespace WebApplication6.Controllers
         }
 
         // GET api/stock/5
-        public string Get(int id)
+        public StockProduct Get(string id)
         {
-            return "value";
+            return products.Where(p => p.Id == id).FirstOrDefault();
         }
 
         // POST api/stock
@@ -50,6 +65,7 @@ namespace WebApplication6.Controllers
         public string Id { get; set; }
         public Product Product { get; set; }
         public ProductQuantity AvailableQuantity {get; set;}
+        public ProductQuantity AvailableBaseQuantity {get; set;}
     }
 
     public class Product
