@@ -9,7 +9,7 @@ namespace WebApplication6.Controllers
 {
     public class StockController : ApiController
     {
-        List<StockProduct> products = new List<StockProduct>(){
+        private static List<StockProduct> _products = new List<StockProduct>(){
             new StockProduct(){
                 Id = "1",
                 Product = new Product(){Name = "Orange"},
@@ -35,18 +35,28 @@ namespace WebApplication6.Controllers
         // GET api/stock
         public IEnumerable<StockProduct> Get()
         {
-            return products;
+            return _products;
         }
 
         // GET api/stock/5
         public StockProduct Get(string id)
         {
-            return products.Where(p => p.Id == id).FirstOrDefault();
+            var products = _products.Where(p => p.Id == id);
+
+            if(products.Count() == 0)
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));            
+
+            return _products.Where(p => p.Id == id).First();
         }
 
         // POST api/stock
-        public void Post([FromBody]string value)
+        public HttpResponseMessage Post([FromBody]StockProduct stockProduct)
         {
+            if (stockProduct == null)
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+
+            _products.Add(stockProduct);
+            return new HttpResponseMessage(HttpStatusCode.Created); 
         }
 
         // PUT api/stock/5
