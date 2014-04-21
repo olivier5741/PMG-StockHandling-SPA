@@ -9,10 +9,18 @@ namespace WebApplication6.Controllers
 {
     public class StockController : ApiController
     {
+        List<StockProduct> products = new List<StockProduct>(){
+            new StockProduct(){
+                Id = "StockProduct/1",
+                Product = new Product(){Name = "Oranges"},
+                AvailableQuantity = new ProductQuantity(){Amount=10, Unit=ProductQuantityUnit.SingleUnit}
+            }
+        };
+
         // GET api/stock
-        public IEnumerable<string> Get()
+        public IEnumerable<StockProduct> Get()
         {
-            return new string[] { "Salut Rossana", "value2" };
+            return products;
         }
 
         // GET api/stock/5
@@ -35,5 +43,25 @@ namespace WebApplication6.Controllers
         public void Delete(int id)
         {
         }
+    }
+
+    public class StockProduct
+    {
+        public string Id { get; set; }
+        public Product Product { get; set; }
+        public ProductQuantity AvailableQuantity {get; set;}
+    }
+
+    public class Product
+    {
+        public string Name {get; set;}
+    }
+
+    public enum ProductQuantityUnit {Box, SingleUnit};
+
+    public class ProductQuantity
+    {
+        public int Amount { get; set; }
+        public ProductQuantityUnit Unit { get; set; }
     }
 }
