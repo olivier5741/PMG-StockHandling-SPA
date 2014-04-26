@@ -26,5 +26,10 @@ namespace WebApplication6.Controllers
 
             return View();
         }
+
+        public ActionResult Stock()
+        {
+            return View();
+        }
     }
 }
