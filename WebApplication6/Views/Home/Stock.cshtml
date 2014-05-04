@@ -9,7 +9,15 @@
     <h2>All Stock Products</h2>
     <ul id="stockProducts" />
 </div>
+
+<div>
+    <h2>StockProducts to update</h2>
+    <select data-bind="options: stockProductsToUpdate, optionsText: 'name'"/>
+</div>
+
 <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+<script src='http://cdnjs.cloudflare.com/ajax/libs/knockout/3.1.0/knockout-min.js'></script>
+
 <script>
     var uri = '../api/stock';
 
@@ -25,6 +33,17 @@
     function formatItem(item) {
         return item.Id + ") " + item.Product.Name + ' - ' + item.AvailableBaseQuantity.Amount + ' unité(s)'  ;
     }
+
+    function UpdateStockProductsQuantity() {
+        this.stockProductsToUpdate = [
+            { id: "1", name: "citron", quantity: 0 },
+            { id: "2", name: "orange", quantity: 0 },
+            { id: "3", name: "vin", quantity: 0 },
+        ];        
+    }
+
+    ko.applyBindings(new UpdateStockProductsQuantity());
+
 </script>
 
 

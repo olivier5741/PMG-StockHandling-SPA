@@ -31,5 +31,10 @@ namespace WebApplication6.Controllers
         {
             return View();
         }
+
+        public ActionResult Order()
+        {
+            return View();
+        }
     }
 }
