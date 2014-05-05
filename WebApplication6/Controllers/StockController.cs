@@ -46,7 +46,7 @@ namespace WebApplication6.Controllers
             if(products.Count() == 0)
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));            
 
-            return _products.Where(p => p.Id == id).First();
+            return products.First();
         }
 
         // POST api/stock
