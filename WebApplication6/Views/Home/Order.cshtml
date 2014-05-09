@@ -12,9 +12,15 @@
         <li>
             <span data-bind="text: name"></span>
             <input data-bind="value: quantity" type="number" name="quantity" min="0" max="100"/>
-            <select data-bind="options: $root.availableUnits, optionsText: 'unit', optionsValue: 'id', value: unit"></select>                
+            <select data-bind="options: $root.availableUnits, optionsText: 'unit', optionsValue: 'id', value: unit"></select>    
+            <span data-bind="text: formattedProductPrice"></span>      
+            <span data-bind="text: formattedCommandItemPrice"></span>               
         </li>
     </ul>
+
+    <h3 data-bind="visible: totalCommandPrice() > 0">
+        Total: <span data-bind="text: totalCommandPrice().toFixed(2)"></span> €
+    </h3>
 
 </div>
 
@@ -42,23 +48,39 @@
 
 <script>
 
-    function OrderProduct(name, quantity, unit) {
+    function OrderProduct(name, quantity, unit, price) {
         var self = this;
         self.name = ko.observable(name);
         self.quantity = ko.observable(quantity);
         self.unit = ko.observable(unit);
+        self.price = ko.observable(price);
+
+        self.formattedProductPrice = ko.computed(function() {
+            return self.price() ? "à " + self.price().toFixed(2) + " €" : "";        
+        });
+
+        self.formattedCommandItemPrice = ko.computed(function () {
+            return self.price() && self.quantity() > 0 ? (self.price()*self.quantity()).toFixed(2) + " €" : "";
+        });
     }
 
     function OrderViewModel() {
         var self = this;
 
-        self.availableUnits = [{id:"1", unit: "boîte(s)" }, {id:"2", unit: "unité(s)"}]
+        self.availableUnits = [{ id: "1", unit: "boîte(s)", numberOfBaseUnits: 15 }, { id: "2", unit: "unité(s)", numberOfBaseUnits: 1 }]
 
         self.productsToOrder = ko.observableArray([
-            new OrderProduct("Citron", 10, "1"),
-            new OrderProduct("Orange", 27, "2"),
-            new OrderProduct("Cerise", 8, "1")
+            new OrderProduct("Citron", 10, "1", 32.4),
+            new OrderProduct("Orange", 27, "2", 44.1),
+            new OrderProduct("Cerise", 8, "1", 53.2)
         ]);
+
+        self.totalCommandPrice = ko.computed(function () {
+            var total = 0;
+            for (var i = 0; i < self.productsToOrder().length; i++)
+                total += self.productsToOrder()[i].price() * self.productsToOrder()[i].quantity();;
+            return total;
+        });
     }
 
     ko.applyBindings(new OrderViewModel);
