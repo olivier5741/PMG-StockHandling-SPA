@@ -10,8 +10,14 @@
 
     <ul data-bind="foreach: productsToOrder">
         <li>
-            <span data-bind="text: name"></span>
-            <input data-bind="value: quantity" type="number" name="quantity" min="0" max="100"/>
+            <span>
+                <span data-bind="text: name"></span>
+                (<span data-bind="text: previousQuantity"></span>)
+            </span>
+            <span>
+                <input data-bind="value: quantity" type="number" name="quantity" min="0" max="100"/>
+                (<span data-bind="text: (quantityDifference()<=0?'':'+') + quantityDifference()"></span>)
+            </span>
             <select data-bind="options: $root.availableUnits, optionsText: 'unit', optionsValue: 'id', value: unit"></select>    
             <span data-bind="text: formattedProductPrice"></span>      
             <span data-bind="text: formattedCommandItemPrice"></span>               
@@ -25,8 +31,8 @@
 </div>
 
 <style type="text/css">
-    ul li span {
-        width: 70px;
+    ul li > span {
+        width: 90px;
         display: inline-block;
     }
 
@@ -54,6 +60,12 @@
         self.quantity = ko.observable(quantity);
         self.unit = ko.observable(unit);
         self.price = ko.observable(price);
+
+        self.previousQuantity = ko.observable(quantity);
+
+        self.quantityDifference = ko.computed(function () {
+            return self.quantity() - self.previousQuantity();
+        });
 
         self.formattedProductPrice = ko.computed(function() {
             return self.price() ? "à " + self.price().toFixed(2) + " €" : "";        
