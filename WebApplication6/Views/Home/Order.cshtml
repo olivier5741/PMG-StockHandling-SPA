@@ -30,6 +30,7 @@
     </h3>
 
     <button data-bind="click: resetOrderProducts">Reset all</button>
+    <button data-bind="click: save">Save</button>
 
 </div>
 
@@ -57,14 +58,14 @@
 
 <script>
 
-    function OrderProduct(name, quantity, unit, price) {
+    function OrderProduct(data) {
         var self = this;
-        self.name = ko.observable(name);
-        self.quantity = ko.observable(quantity);
-        self.unit = ko.observable(unit);
-        self.price = ko.observable(price);
+        self.name = ko.observable(data.Product);
+        self.quantity = ko.observable(data.Quantity);
+        self.unit = ko.observable(data.Unit);
+        self.price = ko.observable(data.Price);
 
-        self.previousQuantity = ko.observable(quantity);
+        self.previousQuantity = ko.observable(self.quantity());
 
         self.quantityDifference = ko.computed(function () {
             return self.quantity() - self.previousQuantity();
@@ -82,13 +83,13 @@
     function OrderViewModel() {
         var self = this;
 
-        self.availableUnits = [{ id: "1", unit: "boîte(s)", numberOfBaseUnits: 15 }, { id: "2", unit: "unité(s)", numberOfBaseUnits: 1 }]
+        self.availableUnits = [{ id: "1", unit: "boîte(s)", numberOfBaseUnits: 15 }, { id: "2", unit: "unité(s)", numberOfBaseUnits: 1 }];
+        self.productsToOrder = ko.observableArray([]);
 
-        self.productsToOrder = ko.observableArray([
-            new OrderProduct("Citron", 10, "1", 32.4),
-            new OrderProduct("Orange", 27, "2", 44.1),
-            new OrderProduct("Cerise", 8, "1", 53.2)
-        ]);
+        $.getJSON("/api/order/1", function (allData) {
+            var mappedOrderProducts = $.map(allData, function (item) { return new OrderProduct(item) });
+            self.productsToOrder(mappedOrderProducts);
+        });
 
         self.totalCommandPrice = ko.computed(function () {
             var total = 0;
@@ -103,6 +104,17 @@
             for (var i = 0; i < self.productsToOrder().length; i++)
                 self.productsToOrder()[i].quantity(self.productsToOrder()[i].previousQuantity()) ;
         }
+
+        self.save = function () {
+
+            alert("Les données vont être sauvées");
+
+            $.ajax("/api/order", {
+                data: ko.toJSON({ order: self.productsToOrder }),
+                type: "post", contentType: "application/json",
+                success: function (result) { alert(result) }
+            });
+        };
     }
 
     ko.applyBindings(new OrderViewModel);
