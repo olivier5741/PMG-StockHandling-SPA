@@ -24,7 +24,7 @@ namespace WebApplication6
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            Store = new DocumentStore { ConnectionStringName = "RAVENHQ_CONNECTION_STRING" };
+            Store = new DocumentStore { ConnectionStringName = "RavenDB" };
             Store.Initialize();            
             IndexCreation.CreateIndexes(Assembly.GetCallingAssembly(), Store);
         }
