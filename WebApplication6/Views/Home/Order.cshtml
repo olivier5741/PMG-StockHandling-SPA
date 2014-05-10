@@ -20,13 +20,16 @@
             </span>
             <select data-bind="options: $root.availableUnits, optionsText: 'unit', optionsValue: 'id', value: unit"></select>    
             <span data-bind="text: formattedProductPrice"></span>      
-            <span data-bind="text: formattedCommandItemPrice"></span>               
+            <span data-bind="text: formattedCommandItemPrice"></span> 
+            <a href="#" data-bind="click: $parent.resetOrderProduct">Reset</a>
         </li>
     </ul>
 
     <h3 data-bind="visible: totalCommandPrice() > 0">
         Total: <span data-bind="text: totalCommandPrice().toFixed(2)"></span> €
     </h3>
+
+    <button data-bind="click: resetOrderProducts">Reset all</button>
 
 </div>
 
@@ -90,9 +93,16 @@
         self.totalCommandPrice = ko.computed(function () {
             var total = 0;
             for (var i = 0; i < self.productsToOrder().length; i++)
-                total += self.productsToOrder()[i].price() * self.productsToOrder()[i].quantity();;
+                total += self.productsToOrder()[i].price() * self.productsToOrder()[i].quantity();
             return total;
         });
+
+        self.resetOrderProduct = function(orderProduct) { orderProduct.quantity(orderProduct.previousQuantity()) }
+
+        self.resetOrderProducts = function () {
+            for (var i = 0; i < self.productsToOrder().length; i++)
+                self.productsToOrder()[i].quantity(self.productsToOrder()[i].previousQuantity()) ;
+        }
     }
 
     ko.applyBindings(new OrderViewModel);
