@@ -1,13 +1,15 @@
-﻿using System;
+﻿using Raven.Client.Document;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace WebApplication6.Controllers
 {
-    public class OrderController : ApiController
+    public class OrderController : RavenDbController
     {
         public IEnumerable<OrderProductDto> Get(string id)
         {
@@ -27,12 +29,19 @@ namespace WebApplication6.Controllers
             };
         }
 
-        public HttpResponseMessage Post([FromBody]Object stockProduct)
+        public async Task<HttpResponseMessage> Post([FromBody]Object stockProduct)
         {
-            if (stockProduct == null)
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            var product = new OrderProductDto
+            {
+                Product = "Citron",
+                Quantity = 10,
+                Unit = "1",
+                Price = 32.45m
+            };
 
-            return new HttpResponseMessage(HttpStatusCode.Accepted);
+            await Session.StoreAsync(product);
+
+            return new HttpResponseMessage(HttpStatusCode.Created);
         }
     }
 
