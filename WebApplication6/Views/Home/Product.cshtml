@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "Product";
+}
+
+<h2>Product</h2>
+
+<ul data-bind="foreach: products">
+    <li>        
+        <span data-bind="text: OrderId"></span>
+        <span data-bind="text: Name" class="productName"></span>
+    </li>
+</ul>
+
+<style type="text/css">
+    ul li > span {
+        width: 90px;
+        display: inline-block;
+    }
+
+    ul li > span.productName {
+        width: 150px;
+    }
+
+    ul li input {
+        width: 50px;
+    }
+
+    ul li select {
+        width: 80px;
+    }
+
+    ul li {
+        margin-bottom: 5px;
+    }
+</style>
+
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+<script src='http://cdnjs.cloudflare.com/ajax/libs/knockout/3.1.0/knockout-min.js'></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/knockout.mapping/2.4.1/knockout.mapping.js"></script>
+<script>
+
+    function ProductsViewModel() {
+        var self = this;
+        self.products = ko.observableArray([]);
+
+
+        $.getJSON("/api/product", function (allData) {
+
+            ko.mapping.fromJS(allData, {}, self.products);
+        });
+
+    }
+
+    ko.applyBindings(new ProductsViewModel);
+</script>
+
