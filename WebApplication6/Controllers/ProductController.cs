@@ -34,7 +34,36 @@ namespace WebApplication6.Controllers
                             UnitUses = new List<UnitUse>{
                                 UnitUse.Order,
                                 UnitUse.Stock
+                            },
+                            BaseUnitMultiple = 40
+                        }
+                    }
+                }, 
+
+                new ProductDto{
+                    Id = "2",
+                    OrderId = "VU233",
+                    Name = "Aspirine",
+                    Units = new List<UnitDto>{
+                        new UnitDto{
+                            Id = "1",
+                            Name = "Cachet",
+                            State = UnitState.InUse,
+                            IsBaseUnit = true,
+                            UnitUses = new List<UnitUse>{
+                                UnitUse.Stock
                             }
+                        },
+                        new UnitDto{
+                            Id = "2",
+                            Name = "Plaque",
+                            State = UnitState.InUse,
+                            IsBaseUnit = false,
+                            UnitUses = new List<UnitUse>{
+                                UnitUse.Order,
+                                UnitUse.Stock
+                            },
+                            BaseUnitMultiple = 24
                         }
                     }
                 }
