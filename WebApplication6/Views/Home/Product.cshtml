@@ -5,29 +5,30 @@
 
 <h2>Product</h2>
 
-<ul data-bind="foreach: products">
-    <li>        
+<ul data-bind="foreach: products" style="width:350px">
+    <li class="product">        
         <span data-bind="text: OrderId"></span>
-        <span data-bind="text: Name" class="productName"></span>
+        <span data-bind="text: Name"></span>
+        <a href="#" data-bind="click: $parent.editProduct" style="float: right">Edit</a>
+        <ul data-bind="foreach: Units">
+            <li>
+                <span data-bind="text: Name"></span>
+                <span data-bind="text: State"></span>
+                <span data-bind="text: (IsBaseUnit() ? '' : '(' + BaseUnitMultiple() + ')' )"></span>
+            </li>
+        </ul>
     </li>
 </ul>
 
 <style type="text/css">
     ul li > span {
-        width: 90px;
+        margin-right: 5px;
         display: inline-block;
     }
 
-    ul li > span.productName {
-        width: 150px;
-    }
-
-    ul li input {
-        width: 50px;
-    }
-
-    ul li select {
-        width: 80px;
+    li.product:not(:last-child) {
+        margin-bottom: 10px;
+        border-bottom: 2px solid black;
     }
 
     ul li {
