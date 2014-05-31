@@ -13,8 +13,8 @@
         <ul data-bind="foreach: Units">
             <li>
                 <span data-bind="text: Name"></span>
-                <span data-bind="text: State"></span>
                 <span data-bind="text: (IsBaseUnit() ? '' : '(' + BaseUnitMultiple() + ')' )"></span>
+                <span data-bind="text: State"></span>                
             </li>
         </ul>
     </li>
