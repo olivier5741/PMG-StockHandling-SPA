@@ -1,18 +1,13 @@
-﻿using Raven.Client.Document;
-using Raven.Client.Indexes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Web;
+﻿using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Newtonsoft.Json.Converters;
 
 namespace WebApplication6
 {
-    public class MvcApplication : System.Web.HttpApplication
+    public class MvcApplication : HttpApplication
     {
         protected void Application_Start()
         {
@@ -24,7 +19,7 @@ namespace WebApplication6
 
             HttpConfiguration config = GlobalConfiguration.Configuration;
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add
-                            (new Newtonsoft.Json.Converters.StringEnumConverter());
+                            (new StringEnumConverter());
         }
     }
 }
