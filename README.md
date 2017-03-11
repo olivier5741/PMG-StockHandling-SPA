@@ -1,2 +1,1 @@
-PMG-StockHandling-SPA
-=====================
+# PMG-StockHandling-SPA
